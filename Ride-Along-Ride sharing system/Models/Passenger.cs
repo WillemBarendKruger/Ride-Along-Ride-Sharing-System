@@ -10,7 +10,7 @@ namespace Ride_Along_Ride_sharing_system.Models
     {
         private Wallet wallet = new Wallet();
 
-        public Wallet Wallet { get => wallet; set => wallet = value; };
+        public Wallet Wallet { get => wallet; set => wallet = value; }
 
         public void ReuestRide(string pickup, string dropoff)
         {
