@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace Ride_Along_Ride_sharing_system.Models
 {
-    internal class Wallet
+    public class Wallet
     {
+        decimal Balance = 1000;
+
+        public decimal Balance1 { get => Balance; set => Balance = value; }
+
+        public void AddMoney(decimal amount)
+        {
+            Balance += amount;
+            Console.WriteLine($"Added {amount} to your  wallet\nYou have {Balance} available");
+        }
     }
 }

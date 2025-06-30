@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ride_Along_Ride_sharing_system.Interfaces
 {
-    internal interface Iridable
+    internal interface IRideable
     {
     }
 }
