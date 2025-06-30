@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ride_Along_Ride_sharing_system.Models;
+using System;
 
 namespace Ride_Along_Ride_sharing_system
 {
@@ -7,6 +8,8 @@ namespace Ride_Along_Ride_sharing_system
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Ride Along\n----------------------");
+            MainMenu menu = new MainMenu();
+            menu.Load();
         }
     }
 }

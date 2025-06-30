@@ -23,9 +23,9 @@ namespace Ride_Along_Ride_sharing_system.Models
             throw new NotImplementedException("Can't request a ride");
         }
 
-        public void AcceptRide()
+        public void AcceptRide(int rideId)
         {
-            Console.WriteLine($"{Name} accepted the ride");
+            Console.WriteLine($"{Name} accepted the ride, ID: {rideId}");
         }
 
         public void ProccessPayment(decimal amount) {
