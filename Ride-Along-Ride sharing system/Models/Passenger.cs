@@ -18,9 +18,9 @@ namespace Ride_Along_Ride_sharing_system.Models
             Console.WriteLine($"{Name} is requesting a ride from {pickup} to {dropoff}");
         }
 
-        public void AcceptRide()
+        public void AcceptRide(int rideId)
         {
-            Console.WriteLine("Ride accepted");
+            throw new NotImplementedException("You can't accept a ride");
         }
 
         public void ProccessPayment(decimal amount)
