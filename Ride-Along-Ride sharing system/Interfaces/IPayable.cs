@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Ride_Along_Ride_sharing_system.Interfaces
 {
-    internal interface IPayable
+    public interface IPayable
     {
+        void ProccessPayment(decimal amount);
     }
 }
