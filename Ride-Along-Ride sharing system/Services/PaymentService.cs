@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ride_Along_Ride_sharing_system.Services
 {
-    internal class PaymentServices
+    internal class PaymentService
     {
     }
 }

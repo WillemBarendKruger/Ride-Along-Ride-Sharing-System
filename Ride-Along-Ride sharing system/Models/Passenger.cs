@@ -6,7 +6,33 @@ using System.Threading.Tasks;
 
 namespace Ride_Along_Ride_sharing_system.Models
 {
-    internal class Passenger : Person
+    public class Passenger : Person
     {
+        private Wallet wallet = new Wallet();
+
+        public Wallet Wallet { get => wallet; set => wallet = value; };
+
+        public void ReuestRide(string pickup, string dropoff)
+        {
+            Console.WriteLine($"{Name} is requesting a ride from {pickup} to {dropoff}");
+        }
+
+        public void AcceptRide()
+        {
+            Console.WriteLine("Ride accepted");
+        }
+
+        public void ProccesPayment(decimal amount)
+        {
+            if (wallet.Balance1 >= amount)
+            {
+                wallet.Balance1 -= amount;
+                Console.WriteLine($"You paid {amount}\nRemaining blanace: {wallet.Balance1}");
+            }
+            else
+            {
+                throw new InvalidOperationException("Insufficent money available");
+            }
+        }
     }
 }
