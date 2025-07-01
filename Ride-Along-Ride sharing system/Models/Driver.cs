@@ -1,9 +1,4 @@
 ﻿using Ride_Along_Ride_sharing_system.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ride_Along_Ride_sharing_system.Models
 {
@@ -30,7 +25,6 @@ namespace Ride_Along_Ride_sharing_system.Models
 
         public void ProccessPayment(decimal amount) {
             earnings += amount;
-            Console.WriteLine($"{Name} earned R{amount}.\nTotale earned: R{earnings}");
         }
     }
 }
