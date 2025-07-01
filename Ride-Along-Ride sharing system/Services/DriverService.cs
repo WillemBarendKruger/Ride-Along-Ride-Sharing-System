@@ -1,10 +1,5 @@
 ﻿using Ride_Along_Ride_sharing_system.Data;
 using Ride_Along_Ride_sharing_system.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ride_Along_Ride_sharing_system.Services
 {
@@ -112,21 +107,28 @@ namespace Ride_Along_Ride_sharing_system.Services
                 var ride = _rides.FirstOrDefault(ride => ride.RideId == id);
                 if (ride != null)
                 {
-                    ride.IsComplete = true;
-                    ride.DriverName = _driver.Name;
-                    decimal fare = ride.CalculateCost();
-                    _driver.ProccessPayment(fare);
-                    FileStorage.SaveToFile(_rides, RideFile);
-
-                    var passengers = FileStorage.LoadFromFile<Passenger>(PassangerFile);
-                    Passenger passenger = passengers?.FirstOrDefault(person => person.Name == ride.PassengerName);
-                    if (passenger != null)
+                    if (ride.IsComplete)
                     {
-                        passenger.ProccessPayment(fare);
-                        FileStorage.SaveToFile(passengers, PassangerFile);
+                        Console.WriteLine("Ride already completed");
                     }
+                    else
+                    {
+                        ride.IsComplete = true;
+                        ride.DriverName = _driver.Name;
+                        decimal fare = ride.CalculateCost();
+                        _driver.ProccessPayment(fare);
+                        FileStorage.SaveToFile(_rides, RideFile);
 
-                        Console.WriteLine("Ride completed and payment calculated");
+                        var passengers = FileStorage.LoadFromFile<Passenger>(PassangerFile);
+                        Passenger passenger = passengers?.FirstOrDefault(person => person.Name == ride.PassengerName);
+                        if (passenger != null)
+                        {
+                            passenger.ProccessPayment(fare);
+                            FileStorage.SaveToFile(passengers, PassangerFile);
+                        }
+                        Console.WriteLine($"Ride completed and payment calculated \n{_driver.Name} earned: R{fare} \nYour Total is: R{_driver.Earnings}");
+                    }
+                        
                 }
                 else
                 {

@@ -1,9 +1,5 @@
 ﻿using Ride_Along_Ride_sharing_system.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Ride_Along_Ride_sharing_system.Models
 {
@@ -70,28 +66,43 @@ namespace Ride_Along_Ride_sharing_system.Models
 
         public void RegisterPassenger()
         {
-            Console.Clear();
-            Console.WriteLine("Register as a Passenger\n-----------------------");
-            Console.Write("Name: ");
-            var name = Console.ReadLine();
-            Console.Write("Email: ");
-            var email = Console.ReadLine();
-            Console.Write("Password: ");
-            var password = Console.ReadLine();
-
-            Passenger passenger = new Passenger
+            try
             {
-                Id = new Random().Next(1000, 9999),
-                Name = name,
-                Email = email,
-                Password = password
-            };
+                Console.Clear();
+                Console.WriteLine("Register as a Passenger\n-----------------------");
+                Console.Write("Name: ");
+                var name = Console.ReadLine();
+                Console.Write("Email: ");
+                var email = Console.ReadLine();
+                Console.Write("Password: ");
+                var password = Console.ReadLine();
 
-            UserService userService = new UserService();
-            userService.RegisterPassenger(passenger);
+                if (name != "" && email != "" && password != "")
+                {
+                    Passenger passenger = new Passenger
+                    {
+                        Id = new Random().Next(1000, 9999),
+                        Name = name,
+                        Email = email,
+                        Password = password
+                    };
 
-            PassengerService passengerService = new PassengerService(passenger);
-            passengerService.ShowPassengerMenu();
+                    UserService userService = new UserService();
+                    userService.RegisterPassenger(passenger);
+
+                    PassengerService passengerService = new PassengerService(passenger);
+                    passengerService.ShowPassengerMenu();
+                }
+                else
+                {
+                    Console.WriteLine("Can't use empty values \nPress any key to continue");
+                    Console.ReadKey();
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Something went wrong");
+            }
         }
 
         public void RegisterDriver()
@@ -99,26 +110,45 @@ namespace Ride_Along_Ride_sharing_system.Models
             Console.Clear();
             Console.WriteLine("Register as a Driver\n-----------------------");
             Console.Write("Name: ");
-            var name = Console.ReadLine();
-            Console.Write("Email: ");
-            var email = Console.ReadLine();
-            Console.Write("Password: ");
-            var password = Console.ReadLine();
-
-            var driver = new Driver
+            try
             {
-                Id = new Random().Next(1000, 9999),
-                Name = name,
-                Email = email,
-                Password = password,
-                IsActive = true
-            };
+                var name = Console.ReadLine();
+                Console.Write("Email: ");
+                var email = Console.ReadLine();
+                Console.Write("Password: ");
+                var password = Console.ReadLine();
 
-            UserService userService = new UserService();
-            userService.RegisterDriver(driver);
+                if(name != "" && email != "" && password != "")
+                {
 
-            DriverService driverService = new DriverService(driver);
-            driverService.ShowDriverMenu();
+                    var driver = new Driver
+                    {
+                        Id = new Random().Next(1000, 9999),
+                        Name = name,
+                        Email = email,
+                        Password = password,
+                        IsActive = true
+                    };
+
+                    UserService userService = new UserService();
+                    userService.RegisterDriver(driver);
+
+                    DriverService driverService = new DriverService(driver);
+                    driverService.ShowDriverMenu();
+
+                }
+                else
+                {
+                    Console.WriteLine("Can't use empty values \nPress any key to continue");
+                    Console.ReadKey();
+                }
+
+               
+            }
+            catch( Exception ex)
+            {
+                throw new Exception("Something went wrong");
+            }
         }
     }
 
