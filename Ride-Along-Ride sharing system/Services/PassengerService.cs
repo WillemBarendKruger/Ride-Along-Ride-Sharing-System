@@ -70,9 +70,10 @@ namespace Ride_Along_Ride_sharing_system.Services
                     Distance = distance
                 };
 
+                decimal cost = newRide.CalculateCost();
                 _rides.Add(newRide);
                 FileStorage.SaveToFile(_rides, RideFile);
-                Console.WriteLine("Ride requested successfully!");
+                Console.WriteLine($"Ride requested successfully! Estimated Cost: R{cost}");
             }
             else
             {
@@ -108,7 +109,7 @@ namespace Ride_Along_Ride_sharing_system.Services
 
         private void ViewHistory()
         {
-            var history = _rides.Where(ride => ride.RideId == _passenger.Id).ToList();
+            var history = _rides.Where(ride => ride.PassengerName == _passenger.Name).ToList();
             if (!history.Any())
             {
                 Console.WriteLine("No ride history.");
@@ -117,7 +118,7 @@ namespace Ride_Along_Ride_sharing_system.Services
             {
                 foreach (var ride in history)
                 {
-                    Console.WriteLine($"Ride ID: {ride.RideId}, From: {ride.PickupLocation} To: {ride.DropoffLocation}, Distance: {ride.Distance}km, Completed: {ride.IsComplete}");
+                    Console.WriteLine($"Ride ID: {ride.RideId}, From: {ride.PickupLocation} To: {ride.DropoffLocation}, Distance: {ride.Distance}km, Completed: {ride.IsComplete}, Driver: {ride.DriverName}");
                 }
             }
 
