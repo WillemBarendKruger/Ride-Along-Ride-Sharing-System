@@ -7,6 +7,7 @@ namespace Ride_Along_Ride_sharing_system.Services
     {
         private Passenger _passenger;
         private List<Ride> _rides;
+        private RatingService _ratingService = new RatingService();
         private const string RideFile = "rides.json";
 
         public PassengerService(Passenger passenger)
@@ -25,7 +26,8 @@ namespace Ride_Along_Ride_sharing_system.Services
                 $"2. View Wallet Balance\n" +
                 $"3. Add Funds to Wallet\n" +
                 $"4. View Ride History\n" +
-                $"5. Logout");
+                $"5. Rate a driver\n"+
+                $"6. Logout");
 
                 string input = Console.ReadLine();
                 switch (input)
@@ -34,7 +36,8 @@ namespace Ride_Along_Ride_sharing_system.Services
                     case "2": ViewWallet(); break;
                     case "3": AddFunds(); break;
                     case "4": ViewHistory(); break;
-                    case "5": return;
+                    case "5": RateaDriver(); break;
+                    case "6": return;
                     default:
                         Console.WriteLine("Invalid input. Press any key to try again.");
                         Console.ReadKey();
@@ -122,6 +125,30 @@ namespace Ride_Along_Ride_sharing_system.Services
                 {
                     Console.WriteLine($"Ride ID: {ride.RideId}, From: {ride.PickupLocation} To: {ride.DropoffLocation}, Distance: {ride.Distance}km, Completed: {ride.IsComplete}, Driver: {ride.DriverName}");
                 }
+            }
+
+            Console.WriteLine("Press any key to return...");
+            Console.ReadKey();
+        }
+
+        private void RateaDriver()
+        {
+            Console.Write("Enter Ride ID to rate: ");
+            if (int.TryParse(Console.ReadLine(), out int rideId))
+            {
+                var ride = _rides.FirstOrDefault(rd => rd.RideId == rideId && rd.PassengerName == _passenger.Name && rd.IsComplete);
+                if (ride != null)
+                {
+                    _ratingService.SubmitRating(ride.DriverName, _passenger.Name);
+                }
+                else
+                {
+                    Console.WriteLine("No completed ride found with that ID.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid input.");
             }
 
             Console.WriteLine("Press any key to return...");

@@ -101,6 +101,7 @@ namespace Ride_Along_Ride_sharing_system.Services
 
         public void CompleteRide()
         {
+            ViewAvailableRides();
             Console.Write("Enter ride ID to complete: ");
             if (int.TryParse(Console.ReadLine(), out int id))
             {
