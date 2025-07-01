@@ -113,6 +113,7 @@ namespace Ride_Along_Ride_sharing_system.Services
                 if (ride != null)
                 {
                     ride.IsComplete = true;
+                    ride.DriverName = _driver.Name;
                     decimal fare = ride.CalculateCost();
                     _driver.ProccessPayment(fare);
                     FileStorage.SaveToFile(_rides, RideFile);
@@ -123,10 +124,6 @@ namespace Ride_Along_Ride_sharing_system.Services
                     {
                         passenger.ProccessPayment(fare);
                         FileStorage.SaveToFile(passengers, PassangerFile);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Passenger not found. No changes made.");
                     }
 
                         Console.WriteLine("Ride completed and payment calculated");
