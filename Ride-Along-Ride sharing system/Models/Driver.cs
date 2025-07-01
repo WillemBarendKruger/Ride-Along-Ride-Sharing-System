@@ -9,12 +9,12 @@ namespace Ride_Along_Ride_sharing_system.Models
 {
     public class Driver : Person, IPayable, IRideable
     {
-        string earnings;
-        string rating;
+        decimal earnings = 0;
+        int rating;
         bool isActive;
 
-        public string Earnings { get => earnings; set => earnings = value; }
-        public string Rating { get => rating; set => rating = value; }
+        public decimal Earnings { get => earnings; set => earnings = value; }
+        public int Rating { get => rating; set => rating = value; }
         public bool IsActive { get => isActive; set => isActive = value; }
 
 
@@ -30,7 +30,7 @@ namespace Ride_Along_Ride_sharing_system.Models
 
         public void ProccessPayment(decimal amount) {
             earnings += amount;
-            Console.WriteLine($"{Name} earned {amount}.\nTotale earned: {earnings}");
+            Console.WriteLine($"{Name} earned R{amount}.\nTotale earned: R{earnings}");
         }
     }
 }

@@ -13,6 +13,7 @@ namespace Ride_Along_Ride_sharing_system.Services
         private Driver _driver;
         private List<Ride> _rides;
         private const string RideFile = "rides.json";
+        private const string PassangerFile = "passenger.json";
 
         public DriverService(Driver driver)
         {
@@ -27,17 +28,17 @@ namespace Ride_Along_Ride_sharing_system.Services
                 Console.Clear();
                 Console.WriteLine($"Welcome {_driver.Name}\n--------------\n" +
                     $"1. View available ride request\n" +
-                    $"2. Cancel a Ride\n" +
+                    $"2. Switch active status \n" +
                     $"3. Complete a ride\n" +
                     $"4. View Earnings\n" +
                     $"5. Logout");
-
+                 
                 var input = Console.ReadLine();
                 switch (input)
                 {
                     case "1": ViewAvailableRides(); 
                         break;
-                    case "2": CancelRide(); 
+                    case "2": SwitchState(); 
                         break;
                     case "3": CompleteRide(); 
                         break;
@@ -54,44 +55,49 @@ namespace Ride_Along_Ride_sharing_system.Services
 
         public void ViewAvailableRides()
         {
-            var available = _rides.Where(ride => ride.RideId == 0 && !ride.IsComplete).ToList();
+            var available = _rides.Where(ride => ride.RideId >= 0 && !ride.IsComplete).ToList();
 
-            if(!available.Any())
+            if (_driver.IsActive)
             {
-                Console.WriteLine("No avaible rides");
-            }
-            else
-            {
-                foreach(var ride in available)
+                if (!available.Any())
                 {
-                    Console.WriteLine($"Ride: {ride.RideId}, From: {ride.PickupLocation} To: {ride.DropoffLocation}, Distance: {ride.Distance} Km");
-                }
-            }
-
-            Console.WriteLine("Press any key to return...");
-            Console.ReadKey();
-        }
-
-        public void CancelRide()
-        {
-            Console.Write("Enter ride ID to Cancel: ");
-            if(int.TryParse(Console.ReadLine(), out int id))
-            {
-                var ride = _rides.FirstOrDefault(ride => ride.RideId == id && ride.RideId == _driver.Id);
-                if(ride != null && !ride.IsComplete)
-                {
-                    ride.RideId = 0;
-                    FileStorage.SaveToFile(_rides, RideFile);
-                    Console.WriteLine("Ride Canceled.");
+                    Console.WriteLine("No avaible rides");
                 }
                 else
                 {
-                    Console.WriteLine("Ride already complete or doesn't exist");
+                    foreach (var ride in available)
+                    {
+                        Console.WriteLine($"Ride: {ride.RideId}, From: {ride.PickupLocation} To: {ride.DropoffLocation}, Distance: {ride.Distance} Km");
+                    }
                 }
             }
             else
             {
-                Console.WriteLine("invalid input");
+                Console.WriteLine("Make your self active to view rides");
+            }
+
+                Console.WriteLine("Press any key to return...");
+            Console.ReadKey();
+        }
+
+        public void SwitchState()
+        {
+            Console.WriteLine($"Confirm switch status to: {!_driver.IsActive} \n1. Yes \n2. No");
+            if (int.TryParse(Console.ReadLine(), out int response))
+            {
+                if (response == 1)
+                {
+                    _driver.IsActive = !_driver.IsActive;
+                    Console.WriteLine("Status switched.");
+                }
+                else if (response == 2)
+                {
+                    Console.WriteLine("No changes made.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid input");
             }
 
             Console.WriteLine("Press any key to return...");
@@ -101,16 +107,29 @@ namespace Ride_Along_Ride_sharing_system.Services
         public void CompleteRide()
         {
             Console.Write("Enter ride ID to complete: ");
-            if(int.TryParse(Console.ReadLine(),out int id))
+            if (int.TryParse(Console.ReadLine(), out int id))
             {
-                var ride = _rides.FirstOrDefault(ride => ride.RideId == id && ride.RideId == _driver.Id);
-                if(ride != null)
+                var ride = _rides.FirstOrDefault(ride => ride.RideId == id);
+                if (ride != null)
                 {
                     ride.IsComplete = true;
                     decimal fare = ride.CalculateCost();
                     _driver.ProccessPayment(fare);
                     FileStorage.SaveToFile(_rides, RideFile);
-                    Console.WriteLine("Ride completed and payment calculated");
+
+                    var passengers = FileStorage.LoadFromFile<Passenger>(PassangerFile);
+                    Passenger passenger = passengers?.FirstOrDefault(person => person.Name == ride.PassengerName);
+                    if (passenger != null)
+                    {
+                        passenger.ProccessPayment(fare);
+                        FileStorage.SaveToFile(passengers, PassangerFile);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Passenger not found. No changes made.");
+                    }
+
+                        Console.WriteLine("Ride completed and payment calculated");
                 }
                 else
                 {
@@ -128,7 +147,7 @@ namespace Ride_Along_Ride_sharing_system.Services
 
         public void ViewEarnings()
         {
-            Console.WriteLine($"Total earnings: {_driver.Earnings} \nPress any key to return...");
+            Console.WriteLine($"Total earnings: R{_driver.Earnings} \nPress any key to return...");
             Console.ReadKey();
         }
 
