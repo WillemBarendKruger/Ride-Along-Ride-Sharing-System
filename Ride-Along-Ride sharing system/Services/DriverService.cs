@@ -39,7 +39,14 @@ namespace Ride_Along_Ride_sharing_system.Services
                         break;
                     case "2": CancelRide(); 
                         break;
-                    case "4": CompleteRide(); 
+                    case "3": CompleteRide(); 
+                        break;
+                    case "4": ViewEarnings();
+                        break;
+                    case "5": return;
+                    default:
+                        Console.WriteLine("Invalid input detected, \nPress any button to try again.");
+                        Console.ReadKey();
                         break;
                 }
             }
@@ -47,7 +54,7 @@ namespace Ride_Along_Ride_sharing_system.Services
 
         public void ViewAvailableRides()
         {
-            var available = _rides.Where(ride => !ride.IsComplete).ToList();
+            var available = _rides.Where(ride => ride.RideId == 0 && !ride.IsComplete).ToList();
 
             if(!available.Any())
             {
@@ -70,10 +77,10 @@ namespace Ride_Along_Ride_sharing_system.Services
             Console.Write("Enter ride ID to Cancel: ");
             if(int.TryParse(Console.ReadLine(), out int id))
             {
-                var ride = _rides.FirstOrDefault(ride => ride.RideId == id && ride.DriverName == _driver.Name);
+                var ride = _rides.FirstOrDefault(ride => ride.RideId == id && ride.RideId == _driver.Id);
                 if(ride != null && !ride.IsComplete)
                 {
-                    ride.DriverName = _driver.Name;
+                    ride.RideId = 0;
                     FileStorage.SaveToFile(_rides, RideFile);
                     Console.WriteLine("Ride Canceled.");
                 }
@@ -96,7 +103,7 @@ namespace Ride_Along_Ride_sharing_system.Services
             Console.Write("Enter ride ID to complete: ");
             if(int.TryParse(Console.ReadLine(),out int id))
             {
-                var ride = _rides.FirstOrDefault(ride => ride.RideId == id && ride.DriverName == _driver.Name);
+                var ride = _rides.FirstOrDefault(ride => ride.RideId == id && ride.RideId == _driver.Id);
                 if(ride != null)
                 {
                     ride.IsComplete = true;
@@ -125,30 +132,5 @@ namespace Ride_Along_Ride_sharing_system.Services
             Console.ReadKey();
         }
 
-        public static void RegisterDriver()
-        {
-            Console.Clear();
-            Console.WriteLine("Register as a Driver\n-----------------------");
-            Console.Write("Name: ");
-            string name = Console.ReadLine();
-            Console.Write("Email: ");
-            string email = Console.ReadLine();
-            Console.Write("Password: ");
-            string password = Console.ReadLine();
-
-            Driver driver = new Driver();
-            {
-                Name = name ?? "";
-                Email = email ?? "";
-                Password = password ?? "";
-                IsActive = true;
-            };
-
-            var userService = new UserService();
-            userService.RegisterDriver(driver);
-
-            var driverService = new DriverService();
-            driverService.ShowDriverMenu();
-        }
     }
 }
