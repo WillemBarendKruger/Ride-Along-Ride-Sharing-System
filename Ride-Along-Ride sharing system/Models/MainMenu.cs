@@ -11,27 +11,28 @@ namespace Ride_Along_Ride_sharing_system.Models
     {
         public void Load()
         {
-            Console.Clear();
-            Console.WriteLine("Ride sharing System\n-------------------\n" +
-                "1. Register as Passenger \n" +
-                "2. Register as Driver \n" +
-                "3. Login \n" +
-                "4. Exit");
-
-            string input = Console.ReadLine();
-            switch (input)
+            while (true)
             {
-                case "1": RegisterPassenger(); 
-                    break;
-                case "2": RegisterDriver();
-                    break;
-                case "3": LoginUser();
-                    break;
-                case "4": return;
-                default:
-                    Console.WriteLine("Invalid input. Press any key to try again.");
-                    Console.ReadKey();
-                    break;
+                Console.Clear();
+                Console.WriteLine("Ride Sharing System\n--------------------------");
+                Console.WriteLine("1. Register as Passenger");
+                Console.WriteLine("2. Register as Driver");
+                Console.WriteLine("3. Login");
+                Console.WriteLine("4. Exit");
+                Console.Write("Select an option: ");
+
+                var input = Console.ReadLine();
+                switch (input)
+                {
+                    case "1": RegisterPassengerFlow(); break;
+                    case "2": RegisterDriverFlow(); break;
+                    case "3": LoginUser(); break;
+                    case "4": return;
+                    default:
+                        Console.WriteLine("Invalid input. Press any key to try again.");
+                        Console.ReadKey();
+                        break;
+                }
             }
         }
 
@@ -39,22 +40,21 @@ namespace Ride_Along_Ride_sharing_system.Models
         {
             Console.Clear();
             Console.Write("Enter email: ");
-            string email = Console.ReadLine();
+            string email = Console.ReadLine() ?? "";
             Console.Write("Enter password: ");
-            string password = Console.ReadLine();
+            string password = Console.ReadLine() ?? "";
 
-            UserService userService = new UserService();
+            var userService = new UserService();
             var passenger = userService.LoginPassenger(email, password);
             var driver = userService.LoginDriver(email, password);
 
-            if(passenger != null)
+            if (passenger != null)
             {
                 Console.WriteLine("Logged in as Passenger");
-                var passengerService = new UserService();
-                //passengerService.ShowPassengerMenu();
-
+                var passengerService = new PassengerService(passenger);
+                passengerService.ShowPassengerMenu();
             }
-            else if(driver != null)
+            else if (driver != null)
             {
                 Console.WriteLine("Logged in as Driver");
                 var driverService = new DriverService(driver);
@@ -62,8 +62,64 @@ namespace Ride_Along_Ride_sharing_system.Models
             }
             else
             {
-                Console.WriteLine("Invalid email or password \nPress any key to return");
+                Console.WriteLine("Invalid email or password.");
+                Console.WriteLine("Press any key to return...");
+                Console.ReadKey();
             }
         }
+
+        public void RegisterPassengerFlow()
+        {
+            Console.Clear();
+            Console.WriteLine("Register as a Passenger\n-----------------------");
+            Console.Write("Name: ");
+            var name = Console.ReadLine();
+            Console.Write("Email: ");
+            var email = Console.ReadLine();
+            Console.Write("Password: ");
+            var password = Console.ReadLine();
+
+            var passenger = new Passenger
+            {
+                Id = new Random().Next(1000, 9999),
+                Name = name ?? "",
+                Email = email ?? "",
+                Password = password ?? ""
+            };
+
+            var userService = new UserService();
+            userService.RegisterPassenger(passenger);
+
+            var passengerService = new PassengerService(passenger);
+            passengerService.ShowPassengerMenu();
+        }
+
+        public void RegisterDriverFlow()
+        {
+            Console.Clear();
+            Console.WriteLine("Register as a Driver\n-----------------------");
+            Console.Write("Name: ");
+            var name = Console.ReadLine();
+            Console.Write("Email: ");
+            var email = Console.ReadLine();
+            Console.Write("Password: ");
+            var password = Console.ReadLine();
+
+            var driver = new Driver
+            {
+                Id = new Random().Next(1000, 9999),
+                Name = name ?? "",
+                Email = email ?? "",
+                Password = password ?? "",
+                IsActive = true
+            };
+
+            var userService = new UserService();
+            userService.RegisterDriver(driver);
+
+            var driverService = new DriverService(driver);
+            driverService.ShowDriverMenu();
+        }
     }
+
 }
