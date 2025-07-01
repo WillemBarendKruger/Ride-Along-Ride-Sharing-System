@@ -50,7 +50,6 @@ namespace Ride_Along_Ride_sharing_system.Services
           
         }
 
-
         private void RequestRide()
         {
             Console.Write("Pickup Location: ");
@@ -63,7 +62,9 @@ namespace Ride_Along_Ride_sharing_system.Services
             {
                 Ride newRide = new Ride
                 {
-                    RideId = _rides.Any() ? _rides.Max(r => r.RideId) + 1 : 1,
+                    RideId = _rides.Any() ? _rides.Max(ride => ride.RideId) + 1 : 1,
+                    DriverName = null,
+                    PassengerName = _passenger.Name,
                     PickupLocation = pickup,
                     DropoffLocation = dropoff,
                     Distance = distance
@@ -84,7 +85,7 @@ namespace Ride_Along_Ride_sharing_system.Services
 
         private void ViewWallet()
         {
-            Console.WriteLine($"Wallet Balance: {_passenger.Wallet.Balance1}");
+            Console.WriteLine($"Wallet Balance: R{_passenger.Wallet.Balance1}");
             Console.WriteLine("Press any key to return...");
             Console.ReadKey();
         }

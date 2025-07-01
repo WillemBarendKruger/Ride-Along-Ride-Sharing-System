@@ -15,7 +15,7 @@ namespace Ride_Along_Ride_sharing_system.Models
         public void AddMoney(decimal amount)
         {
             Balance += amount;
-            Console.WriteLine($"Added {amount} to your  wallet\nYou have {Balance} available");
+            Console.WriteLine($"Added R{amount} to your  wallet\nYou have R{Balance} available");
         }
     }
 }

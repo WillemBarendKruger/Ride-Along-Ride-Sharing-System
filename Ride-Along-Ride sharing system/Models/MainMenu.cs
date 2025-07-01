@@ -24,8 +24,8 @@ namespace Ride_Along_Ride_sharing_system.Models
                 var input = Console.ReadLine();
                 switch (input)
                 {
-                    case "1": RegisterPassengerFlow(); break;
-                    case "2": RegisterDriverFlow(); break;
+                    case "1": RegisterPassenger(); break;
+                    case "2": RegisterDriver(); break;
                     case "3": LoginUser(); break;
                     case "4": return;
                     default:
@@ -40,9 +40,9 @@ namespace Ride_Along_Ride_sharing_system.Models
         {
             Console.Clear();
             Console.Write("Enter email: ");
-            string email = Console.ReadLine() ?? "";
+            string email = Console.ReadLine();
             Console.Write("Enter password: ");
-            string password = Console.ReadLine() ?? "";
+            string password = Console.ReadLine();
 
             var userService = new UserService();
             var passenger = userService.LoginPassenger(email, password);
@@ -68,7 +68,7 @@ namespace Ride_Along_Ride_sharing_system.Models
             }
         }
 
-        public void RegisterPassengerFlow()
+        public void RegisterPassenger()
         {
             Console.Clear();
             Console.WriteLine("Register as a Passenger\n-----------------------");
@@ -79,22 +79,22 @@ namespace Ride_Along_Ride_sharing_system.Models
             Console.Write("Password: ");
             var password = Console.ReadLine();
 
-            var passenger = new Passenger
+            Passenger passenger = new Passenger
             {
                 Id = new Random().Next(1000, 9999),
-                Name = name ?? "",
-                Email = email ?? "",
-                Password = password ?? ""
+                Name = name,
+                Email = email,
+                Password = password
             };
 
-            var userService = new UserService();
+            UserService userService = new UserService();
             userService.RegisterPassenger(passenger);
 
-            var passengerService = new PassengerService(passenger);
+            PassengerService passengerService = new PassengerService(passenger);
             passengerService.ShowPassengerMenu();
         }
 
-        public void RegisterDriverFlow()
+        public void RegisterDriver()
         {
             Console.Clear();
             Console.WriteLine("Register as a Driver\n-----------------------");
@@ -108,16 +108,16 @@ namespace Ride_Along_Ride_sharing_system.Models
             var driver = new Driver
             {
                 Id = new Random().Next(1000, 9999),
-                Name = name ?? "",
-                Email = email ?? "",
-                Password = password ?? "",
+                Name = name,
+                Email = email,
+                Password = password,
                 IsActive = true
             };
 
-            var userService = new UserService();
+            UserService userService = new UserService();
             userService.RegisterDriver(driver);
 
-            var driverService = new DriverService(driver);
+            DriverService driverService = new DriverService(driver);
             driverService.ShowDriverMenu();
         }
     }

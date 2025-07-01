@@ -28,7 +28,7 @@ namespace Ride_Along_Ride_sharing_system.Models
             if (wallet.Balance1 >= amount)
             {
                 wallet.Balance1 -= amount;
-                Console.WriteLine($"You paid {amount}\nRemaining blanace: {wallet.Balance1}");
+                Console.WriteLine($"You paid R{amount}\nRemaining balance: R{wallet.Balance1}");
             }
             else
             {
