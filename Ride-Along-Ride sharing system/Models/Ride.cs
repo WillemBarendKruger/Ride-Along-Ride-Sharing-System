@@ -3,6 +3,7 @@ namespace Ride_Along_Ride_sharing_system.Models
 {
     public class Ride
     {
+        Passenger passenger = new Passenger();
         int rideId;
         string driverName;
         string passengerName;
@@ -20,6 +21,18 @@ namespace Ride_Along_Ride_sharing_system.Models
         public bool IsComplete { get => isComplete; set => isComplete = value; }
         public decimal Distance { get => distance; set => distance = value; }
 
-        public decimal CalculateCost() => Distance * 5.0m;
+        public decimal CalculateCost()
+        {
+            decimal cost = Distance * 5.0m;
+            if (cost > passenger.Wallet.Balance1)
+            {
+                Console.WriteLine("Insufficient funds. Please add more money to your wallet or try again.");
+                throw new InvalidOperationException("Insufficient funds.");
+            }
+            else
+            {
+                return cost;
+            }
+        }
     }
 }

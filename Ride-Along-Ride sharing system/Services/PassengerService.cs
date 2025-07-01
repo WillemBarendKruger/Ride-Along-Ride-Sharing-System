@@ -47,32 +47,39 @@ namespace Ride_Along_Ride_sharing_system.Services
 
         private void RequestRide()
         {
-            Console.Write("Pickup Location: ");
-            string pickup = Console.ReadLine() ?? "";
-            Console.Write("Drop-off Location: ");
-            string dropoff = Console.ReadLine() ?? "";
-            Console.Write("Distance (in km): ");
-
-            if (decimal.TryParse(Console.ReadLine(), out decimal distance))
+            try
             {
-                Ride newRide = new Ride
+                Console.Write("Pickup Location: ");
+                string pickup = Console.ReadLine() ?? "";
+                Console.Write("Drop-off Location: ");
+                string dropoff = Console.ReadLine() ?? "";
+                Console.Write("Distance (in km): ");
+
+                if (decimal.TryParse(Console.ReadLine(), out decimal distance))
                 {
-                    RideId = _rides.Any() ? _rides.Max(ride => ride.RideId) + 1 : 1,
-                    DriverName = null,
-                    PassengerName = _passenger.Name,
-                    PickupLocation = pickup,
-                    DropoffLocation = dropoff,
-                    Distance = distance
-                };
+                    Ride newRide = new Ride
+                    {
+                        RideId = _rides.Any() ? _rides.Max(ride => ride.RideId) + 1 : 1,
+                        DriverName = null,
+                        PassengerName = _passenger.Name,
+                        PickupLocation = pickup,
+                        DropoffLocation = dropoff,
+                        Distance = distance
+                    };
 
-                decimal cost = newRide.CalculateCost();
-                _rides.Add(newRide);
-                FileStorage.SaveToFile(_rides, RideFile);
-                Console.WriteLine($"Ride requested successfully! Estimated Cost: R{cost}");
+                    decimal cost = newRide.CalculateCost();
+                    _rides.Add(newRide);
+                    FileStorage.SaveToFile(_rides, RideFile);
+                    Console.WriteLine($"Ride requested successfully! Estimated Cost: R{cost}");
+                }
+                else
+                {
+                    Console.WriteLine("Invalid distance input.");
+                }
             }
-            else
+            catch(Exception ex)
             {
-                Console.WriteLine("Invalid distance input.");
+                Console.WriteLine(ex.Message);
             }
 
             Console.WriteLine("Press any key to return...");

@@ -35,6 +35,7 @@ namespace Ride_Along_Ride_sharing_system.Models
         public void LoginUser()
         {
             Console.Clear();
+            Console.WriteLine("Login\n--------------------------");
             Console.Write("Enter email: ");
             string email = Console.ReadLine();
             Console.Write("Enter password: ");

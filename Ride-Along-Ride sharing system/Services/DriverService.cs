@@ -21,7 +21,7 @@ namespace Ride_Along_Ride_sharing_system.Services
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine($"Welcome {_driver.Name}\n--------------\n" +
+                Console.WriteLine($"Welcome {_driver.Name} (Driver menu)\n--------------\n" +
                     $"1. View available ride request\n" +
                     $"2. Switch active status \n" +
                     $"3. Complete a ride\n" +
@@ -126,7 +126,7 @@ namespace Ride_Along_Ride_sharing_system.Services
                             passenger.ProccessPayment(fare);
                             FileStorage.SaveToFile(passengers, PassangerFile);
                         }
-                        Console.WriteLine($"Ride completed and payment calculated \n{_driver.Name} earned: R{fare} \nYour Total is: R{_driver.Earnings}");
+                        Console.WriteLine($"Ride completed and payment calculated \n{_driver.Name} you earned: R{fare} \nYour Total is: R{_driver.Earnings}");
                     }
                         
                 }
